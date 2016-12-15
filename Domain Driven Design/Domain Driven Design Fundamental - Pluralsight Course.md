@@ -69,6 +69,7 @@ Don't try to do everything at once, it would be very difficult & expensive
 
 ## A Mind Map of DDD's Working Parts
 
+---
 
 # 2. DDD: Modeling Problems in Software
 
@@ -158,7 +159,7 @@ Know enough to be dangerous
 ## Focus on the Domain
 D is for Domain
 
-[The Domain Layer is] responsible for representing concepts of the business, information about the business situation, and business rules. State that reflects the business situation is controlled and used here, even though the technical details of storing it are delegated to the infrastructure. This layer is the heart of business software.
+[The Domain Layer is] responsible for representing **concepts of the business**, **information about the business situation**, and **business rules**. State that reflects the business situation is controlled and used here, even though the technical details of storing it are delegated to the infrastructure. This layer is the heart of business software.
 
 Focus on the domain not the technical details
 
@@ -177,6 +178,7 @@ Not Attributes
 + Room.Number
 
 ## Anemic and Rich Models
+Anemic Domain Models vs Rich Domain Models
 
 ### Anemic Domain Models
 Focus on state of objects
@@ -184,10 +186,28 @@ Focus on state of objects
 ### Rich Domain Models
 
 ## Entities in DDD and in Our Bounded Context
+Many objects are not fundamentally defined by their attributes, but rather by a **thread of continuity** and **identity**.
+
+Entities are objects those are defined by identity
 
 ## Eric Evans on the Single Responsibility Entities
+"I don't think an entity ought to have a lot of different business logic in it"
+"...more and more conflict..."
+"The responsibilities that I would focus the design of an entity on ... are the identity and the life cycle"
+"The identity isn't [always] just an ID field"
+"But sometime identity is so complex that I would have another object or set of functions be responsible for that."
+
+UPS Package ID 98383849283
+Received | Shipped | In Transit | Arrived Loc A | Arrived Loc B | Delivered
+
+"The entity might delegate [logic] to value objects ... or invoke a service."
 
 ## Eric Evans on the Entity Equality Methods
+Should Entities Have Equality Comparers?
+
+"I've come to believe that an entity shouldn't even have an equality comparison."
+"The question of whether an entity is the same as other entity is non-trivial question."
+
 
 ## How We've Implemented Entities in Our Code
 
@@ -196,15 +216,178 @@ Focus on state of objects
 ## Value Objects
 
 ## Eric Evans on the Methods in Value Objects
+Should value objects have methods and logics?
+"Value objects are very good place to put methods and logics ... a better place than entities."
+"An example: Dates are a classic value object"
+But logic with no side effect
 
 ## Value Objects in Our Code
+Value Objects are immutable (never be changed)
 
 ## Eric Evans on the Entity Logic in Value Objects
+Should value objects own the logic of entities?
+"If there is logic that is classic software logic, I like to have that in value objects."
+"You can really test value objects tremendously easier than entities."
+"The entity becomes a critical place of glue... an orchestrator."
+"Methods of the entity [have] high level things that read like a use case level of communication, rather than the nitty gritty details."
 
 ## Domain Services
+When an operation is important to the model, but doesn't necessarily belong on any one entity or value object, a service is often appropriate.
+But don't be too quick to give up on finding a natural home for the operation on an existing entity or value object.
 
-## Glossary
+Good domain services
++ Not a natural part of an Entity or Value Object
++ Have an interface defined in terms of other domain model elements
++ Are stateless (but may have side effects)
+
+Examples of Services in Different Layers
++ UI Layer (& Application Layer)
++ Domain (Application Code)
++ Infrastructure
+
+## Glossary of Terms
++ Anemic Domain Model: Model with classes focused on state management. Good for CRUD.
++ Rich Domain Model: Model with logic focused on behavior, not just state. Preferred for DDD.
++ Entity: A mutable class with an identity (not tied to it's property values) used for tracking and persistence.
++ Immutable: Refers to a type whose state cannot be changed once the object has been instantiated.
++ Value Object: An immutable class whose identity is dependent on the combination of its values.
++ Services: Provide a place in the model to hold behavior that doesn't belong elsewhere in the domain.
++ Side Effects: Changes in the state of the application or interaction with the outside world (e.g. infrastructure)
 
 ## Key Takeaways
 
 ## Resources
+
+---
+
+# 3. Aggregates in DDD
+A Critical Pattern for Managing Complexity in the Domain
+
+# Introduction
+
+# Goals
+DDD helps with complex domains
+How do we manage this complexity?
+
++ Aggregates
++ Aggregate Roots
++ Invariants
++ Shifting our Design to Smarter Aggregate
++ Implementing Aggregates in Code
+
+# Tackling Data Complexity
+
+# Introducing Aggregates and Aggregate Roots
++ Customer Aggregate: (Aggregate Root) Customer <1>----<N> Address
++ Product Aggregate: (Aggregate Root) Product <1>---<N> Component
+
+Data changes to the Aggregate should follow ACID
+
+An **aggregate** is a cluster of associated objects that we treat as a unit for the purpose of data changes.
+
+# Interacting with Aggregates
+Relationships between Aggregates
++ Non-Root Aggregate can only be referenced by the Root Aggregate in the same Aggregate
++ Root Aggregate can reference to and be referenced by other Root Aggregate
+
+# Evolving the Appointments Aggregate
+
+
+# Using Invariants to Better Understand Our Aggregate
+Invariants
+Examples of Aggregate Invariants
++ Total items on purchase order do not exceed limit
++ Two appointments do not overlap on another
++ End date follow begin date
+
+# Modeling Breakthroughs and Refactoring
+
+# Considering Schedule as Our New Aggregate
+
+# The Schedule Aggregate in Our Application
+
+# Review Aggregate Tips
++ Aggregates are not always the answer!
++ Aggregates can connect only by the root
++ Don't overlook using FKs for non-root entities
++ "Aggregates of one" are acceptable (An aggregate that has only one object in it)
++ "Rule of Cascading Deletes"
+
+# Glossary of Terms
++ Aggregate: is a group of related objects that work together in a transaction (a transaction graph of objects)
++ Aggregate Root: the entry point of an aggregate which ensures the integrity of the entire graph
++ Invariant: a condition that should always be true for the system to be in a consistent state
++ Persistence Ignorant Classes: Classes that have no knowledge about how they are persisted
+
+# Resources
+
+---
+
+# 4. Repositories
+
+# Introduction
+An other important pattern for managing domain complexity
+
+# Goals
++ Define Repositories
++ Tips & Benefits
++ Common Repository Conundrums
++ Repository Implementations in Our App
+
+# Introducing Repositories
+Repository Design Pattern
+(Design Pattern Library Course on PluralSight)
+
+Object Life Cycle
++ No persistence:
+Create -> Do Stuff -> Destroy
++ With persistence:
+Create -> Reconstitute from Persistence -> Do stuff -> Save Changes to Persistence -> Destroy
+
+--> Use Repositories to manage the Life Cycle of persistent objects without the objects having to know anything about their persistence.
+We call those objects persistence ignorant
+
+A repository represents all objects of a certain type as a conceptual set ... like a collection with more elaborate querying capability
+
+# Repository Tips, Benefits, and Guidance
+### Tips
++ Think of it as an in-memory collection (actions with repositories: add, remove, retrieve)
++ Implement a known, common access Interface
++ Methods for add & remove
++ Methods that predefine criteria for object selection
++ Repos for aggregate roots
++ Client focuses on the model, repo focuses on persistence
+
+### Benefits
++ Provides common abstraction for persistence
++ Promotes Separation of Concerns
++ Communicate Design Decisions
++ Enables Testability
++ Improved Maintainability
+
+Client code can be ignorant of repository implementation... but developers cannot
+
+Common Repository Blunders
++ N+1 Query Errors
++ Inappropriate use of eager or lazy loading
++ Fetching more data than require
+
+# Comparing Repositories and Factories
+Factories are only involved in creating new objects
+Repositories are used to find and update existing objects
+Repositories can use a Factory to create its objects
+Factories should not be involved in persistence
+
+# To IRepository T or Not to IRepository T
+
+# Generic Repositories in DDD
+
+# Repositories in Our Application
+
+# Refactoring for better Separation
+
+# Glossary
++ Repository: A class that encapsulates the data persistence for an aggregate root
++ ACID: Atomic, Consistent, Isolated, and Durable
+
+# References
