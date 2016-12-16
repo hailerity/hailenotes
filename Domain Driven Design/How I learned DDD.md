@@ -90,10 +90,18 @@ Why?
 
 It's going to take 3 hours to read or more
 
+Ok, let's get started with DDD Quicly
+
+Until now, I have read half of it, and I feel good. I think that I read it at right time. Because it explains deeply each term.
+
+Almost finish, back to the rest later
 
 ## 5. I think I should look deep into some projects
 to undertand how did they implement DDD
 And I should dive into a Ruby project, because I'm familiar with it
+
+Ok, let's pull down the DDD Sample in Ruby
+
 
 
 ## 6. Try to search with the keyword DDD process, or DDD step by step
