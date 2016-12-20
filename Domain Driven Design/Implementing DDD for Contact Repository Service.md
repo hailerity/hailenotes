@@ -54,6 +54,32 @@ We have **Contact Aggregate** with Contact is **Aggregate Root**, and that's the
 
 Why not Customer is the Aggregate Root?
 
+Let's say, it a contact is destroyed, should customer information be destroyed too?. Hold on, we have some buzzwords here:
++ **Customer**
++ **Contact**
++ **Order**
+
+What is a contact exactly?
+
+Should we call it order instead of contact?
++ An order has *customer information*, *order detail*
++ A contact has *customer information*, *order* -> this is the way domain expert says
+
+And now, back to above question, should customer has it own aggregate?
+
+How to answer this question? Developer saying or domain expert saying?
+
+I have no idea, but let customer has it own aggregate.
+
+### ERD
+[ERD](./assets/dmarol-erb.md)
 
 ### Service
 We can have a ContactService serving import contact and export contact. But we can put action import and export to Contact, so?
+
+Let's talk more about import and export
+
+#### Import contact
+
+
+#### Export contact

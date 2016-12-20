@@ -103,5 +103,14 @@ And I should dive into a Ruby project, because I'm familiar with it
 Ok, let's pull down the DDD Sample in Ruby
 
 
+## 6. Going to implement in a project
 
-## 6. Try to search with the keyword DDD process, or DDD step by step
+I am applying ddd into refactoring Marketing Online service.
+
+After a few step, I got trouble.
+
+I have no domain expert, actually I don't know who is domain expert. This service is not really for customer, it's quite technical.
+
+I try to use domain expert language, but sometime I realize that I use technical language.
+
+Now, I have to decide whether I should keep moving on or back to concepts to understand more, or have a discussion with someone else. Come back later.
