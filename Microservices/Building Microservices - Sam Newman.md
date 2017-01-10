@@ -285,3 +285,92 @@ Where to start? We'll look at how to think about the boundaries of your microser
 ## Summary
 + The ideas presented in Eric Evans's Domain-Driven Design are very useful to us in finding sensible boundaries for our services, and I've scratched the surface here
 + Although this chapter has been mostly high-level, we need to get much more technical in the next
+
+# Chapter 4: Integration
++ Getting integration right is the single most important aspect of the technology associated with microservices in my opinion
++ Do it well, and your microservices retain their autonomy, allowing you to change and release independent of the whole
+
+## Looking for the Ideal Integration Technology
++ SOA, XML-RPC, REST?
++ We'll dive into those in a moment, but before we do, let's think about what we want out whatever technology we pick
+
+### Avoid Breaking Changes
++ We want to pick technology that ensures this happens as rarely as possible
++ Example: if a microservices add a new fields to data it sends out, existing customers shouldn't be impacted
+
+### Keep Your APIs Technology-Agnostic
++ The one certainty is change
++ It's is very important that you keep your the APIs used for communication between microservices technology-agnostic
+
+### Make Your Service Simple for Consumers
++ We want to make it easy for consumers to use our service
++ Having a beautiful factored microservice doesn't count for much if the cost of using it as a consumer is sky high
++ We'd like to allow our clients full freedom in their technology choice, but on the other hand, providing a client library can ease adoption
+
+### Hide Internal Implementation Detail
++ We don't want our consumers to be bound to our internal implementation, this leads to increasing coupling
++ This means that when want to change something inside our service, we can break our consumers by requiring them to also change
++ So any technology that pushes us to expose internal representation should be avoided
+
+## Interfacing with Customers
++ Let's look at some of the most common options out there and try to work out which one works best for us
++ Let's pick a real-world example from MusicCorp
+
+## The Shared Database
++ By far the most common form of integration that I or any of my colleagues in the industry is database integration
++ In this world, if other services want information from a service, they reach in to the database, and if they want to change, they reach into the database
+
+## Synchronous Versus Asynchronous
++ Before we start diving into the specifics of different technology choices, we should discuss on of the most important decisions we can make in terms of how services collaborate
++ Should communication synchronous or asynchronous
++ Request/Response or Event-based
+
+## Orchestration Versus Choreography
+
+## Remote Procedure Calls
++ Remote procedure call refers to the technique of making a local call and having it execute on a remote server somewhere
++ There are a number of different types of of RPC technology out there
+  + SOAP
+  + Thrift
+  + Protocol Buffers
+  + RMI
++ Many of these technologies are binary in nature , like Java RMI, while SOAP uses XML for its message formats
+
+### Technology Coupling
+
+### Local Calls Are Not Like Remote Calls
++ The core idea of RPC is to hide the complexity of a remote call
++ Many implementations of RPC, though , hide too much
++ With PRC, though, the cost of marshalling and unmarshalling payloads can be significant, not to mention the time taken to send things over the network
++ This means you need to think differently about API design for remote interfaces versus local interfaces
++ You need to think about the network itself, the first of the fallacies of distributed computing is "The network is reliable", but network aren't reliable, they can and will fail
+
+### Brittleness
+
+### Is RPC Terrible?
+
+## REST
+
+### REST And HTTP
+
+### Hypermedia As The Engine of Application State
+
+### Beware Too Much Convenience
+
+### Downsides to REST Over HTTP
+
+## Implementing Asynchronous Event-Based Collaboration
++ We've talked for a bit about some technologies that can help us implement request/response patterns. What about event-based, asynchronous communication?
+
+### Technology Choices
++ Two main parts we need to consider here: a way for our microservices to emit events, and a way for our consumers to find out those events have happened
++ Traditionally, message brokers like RabbitMQ try to handle both problems
+  + Producers use an API to publish an event to the broker
+  + The broker handles subscriptions, allowing consumers to be informed when an event arrives
+  + These brokers can even handle the state of consumers
++ These systems are normally designed to be scalable and resilient, but that doesn't come for free, it can add complexity to the development process
++ Another approach is to try to use HTTP as a way of propagating events, ATOM is a REST-compliant specification that defines semantics for publishing feeds or resources
+
+### Complexities of Asynchronous Architectures
+
+### Services as State Machines
